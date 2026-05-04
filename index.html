@@ -1,22 +1,168 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Geospatial Mashup</title>
+<title>WebGIS Mitigasi Bencana</title>
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
-#map {
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+/* ===== HEADER ===== */
+#header {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100vh;
+  background: #1f3a5f;
+  color: white;
+  z-index: 1000;
+  padding: 10px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+#header .top {
+  display: flex;
+  align-items: center;
+}
+
+#header img {
+  height: 50px;
+  margin-right: 15px;
+}
+
+#header .title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#header .subtitle {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* identitas */
+#header .info {
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 250px;
+  height: calc(100vh - 90px);
+  background: #ffffff;
+  z-index: 900;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+  padding: 15px;
+  overflow-y: auto;
+}
+
+#sidebar h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #1f3a5f;
+}
+
+#sidebar p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ===== MAP ===== */
+#map {
+  position: absolute;
+  top: 90px;
+  left: 250px;
+  width: calc(100% - 250px);
+  height: calc(100vh - 90px);
+}
+
+/* ===== LEGEND ===== */
+#legend {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.9);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.legend-item {
+  margin-bottom: 5px;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
 }
 </style>
+
 </head>
 <body>
-<div id="map"></div>
-<script>
 
+<!-- ===== HEADER ===== -->
+<div id="header">
+  <div class="top">
+    <img src="Lambang UGM-hitam.png">
+    <div>
+      <div class="title">WEBGIS MITIGASI BENCANA</div>
+      <div class="subtitle">Kawasan Gunung Rinjani</div>
+    </div>
+  </div>
+
+  <div class="info">
+    <b>Nama:</b> Adyatma Damarjati Amarhathany |
+    <b>NIM:</b> 23/520251/GE/10271 |
+    <b>Instansi:</b> UNIVERSITAS GADJAH MADA
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div id="sidebar">
+  <h3>Informasi Peta</h3>
+  <p>
+    Peta ini menampilkan kawasan mitigasi bencana erupsi Gunung Rinjani,
+    termasuk zona bahaya, jalur evakuasi, serta lokasi fasilitas kesehatan.
+  </p>
+
+  <h3>Fitur</h3>
+  <p>
+    - Titik: Akses Medis<br>
+    - Area: Kawasan Evakuasi<br>
+    - Garis: Jalur Evakuasi<br>
+    - Lingkaran: Zona Bahaya
+  </p>
+</div>
+
+<div id="map"></div>
+
+<!-- ===== LEGEND ===== -->
+<div id="legend">
+  <div class="legend-item">
+    <span class="legend-color" style="background:red;"></span> Jalur Evakuasi
+  </div>
+  <div class="legend-item">
+    <span class="legend-color" style="background:#00FF7F;"></span> Area Evakuasi
+  </div>
+  <div class="legend-item">
+    <span class="legend-color" style="background:pink;"></span> Zona Bahaya
+  </div>
+</div>
+
+<script>
 
 // --- Inisialisasi Peta ---
 var mymap = L.map('map').setView([-8.550125745052497, 116.36540491167659], 10);
@@ -25,8 +171,7 @@ var mymap = L.map('map').setView([-8.550125745052497, 116.36540491167659], 10);
 // --- Basemap OpenStreetMap ---
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 maxZoom: 19,
-attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">' +
-'OpenStreetMap</a> contributors'
+attribution: '&copy; OpenStreetMap contributors'
 }).addTo(mymap);
 
 
@@ -103,6 +248,7 @@ var polyline = L.polyline([
 ], { color: '#FF0000', weight: 3, opacity: 0.8 })
 .addTo(mymap);
 polyline.bindPopup('alur penyelamatan korban erupsi rinjani');
+
 </script>
 </body>
 </html>

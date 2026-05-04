@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>WebGIS Mitigasi Bencana</title>
+<title>Geospatial Mashup</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
-body {
+html, body {
   margin: 0;
+  height: 100%;
   font-family: "Segoe UI", Tahoma, sans-serif;
+  overflow: hidden;
 }
 
 /* ===== HEADER ===== */
 #header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -46,7 +51,6 @@ body {
   opacity: 0.8;
 }
 
-/* identitas */
 #header .info {
   margin-top: 5px;
   font-size: 13px;
@@ -108,6 +112,44 @@ body {
   height: 15px;
   margin-right: 5px;
 }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+  html, body {
+    overflow: auto;
+  }
+
+  #sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+    box-shadow: none;
+  }
+
+  #map {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60vh;
+  }
+
+  #header .top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #header img {
+    margin-bottom: 5px;
+  }
+
+  #header .info {
+    font-size: 12px;
+  }
+
+}
 </style>
 
 </head>
@@ -167,33 +209,32 @@ body {
 // --- Inisialisasi Peta ---
 var mymap = L.map('map').setView([-8.550125745052497, 116.36540491167659], 10);
 
+// FIX ukuran saat resize
+window.addEventListener('resize', function () {
+  mymap.invalidateSize();
+});
 
-// --- Basemap OpenStreetMap ---
+// --- Basemap ---
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 maxZoom: 19,
 attribution: '&copy; OpenStreetMap contributors'
 }).addTo(mymap);
 
-
-// --- Marker (Objek Titik 1) ---
+// --- Marker ---
 var marker = L.marker([-8.601727346559542, 116.45051521634622]).addTo(mymap);
 marker.bindPopup('<b>Akses Kesehatan Medis 1</b><br>Puskesmas.');
 
-
-// --- Marker (Objek Titik 2) ---
 var marker = L.marker([-8.573621118152161, 116.1985841777801]).addTo(mymap);
 marker.bindPopup('<b>Akses Kesehatan Medis 2</b><br>Puskesmas.');
 
-
-// --- Circle (Objek Lingkaran) ---
+// --- Circle ---
 var circle = L.circle([-8.406835008540924, 116.41061179787374], {
 color: '#FF1493', fillColor: '#FFC0CB',
 fillOpacity: 0.5, radius: 20000
 }).addTo(mymap);
 circle.bindPopup('Zona Bahaya Radius 20000 m dari titik ini.');
 
-
-// --- Polygon (Objek Area) ---
+// --- Polygon ---
 var polygon = L.polygon([
   [-8.575000778293003, 116.1659217173297],
   [-8.581333277167687, 116.16745314214444],
@@ -237,8 +278,7 @@ var polygon = L.polygon([
 .addTo(mymap);
 polygon.bindPopup('Area Kawasan Evakuasi Erupsi Rinjani');
 
-
-// --- Polyline (Objek Garis) ---
+// --- Polyline ---
 var polyline = L.polyline([
 [
   [-8.407500275373025, 116.41019367615297],
